@@ -7,10 +7,10 @@ public class Glider extends UnfuelledAircraft{
 
 	
 	public Glider(String locationName){
-		super(aircraftType,  locationName, timeNeededToTakeOff, timeNeededToLand);
+		super(aircraftType, currentLocation, timeNeededToTakeOff, timeNeededToLand);
 	}
 	
-	private void takeOff(){
+	public void takeOff(){
 		//overwrite method	to town down
 		//Must take off whilst being towed by a light aircraft
 	}

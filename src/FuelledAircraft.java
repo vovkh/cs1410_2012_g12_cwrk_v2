@@ -1,12 +1,12 @@
 
-public class FuelledAircraft extends Aircraft{
+public abstract class FuelledAircraft extends Aircraft{
 
 	protected int currentFuelLevel;
 	protected int originalFuelLevel;
 	protected int currentFuelConsumptionLevel = 0;
 
-	public FuelledAircraft(String aircraftType, String locationName, int timeTakenToTakeOff, int timeTakenToLand) {
-		super(aircraftType, locationName, timeNeededToTakeOff, timeNeededToLand);
+	public FuelledAircraft(String aircraftType, Location currentLocation, int timeTakenToTakeOff, int timeTakenToLand) {
+		super(aircraftType, currentLocation, timeNeededToTakeOff, timeNeededToLand);
 		generateAmountOfFuel();
 	}
 

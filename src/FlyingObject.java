@@ -25,13 +25,11 @@ public interface FlyingObject {
 
 	public void land(Queue qu) ;
 
-	public void moveToANewLocation();
+	public void setNewLocation(Location currentLocation);
 
 	public void setArrivalTickOnQueue(int value);
 
 	public void setArrivalTickOnRunway(int value) ;
-
-	public void setLocation(Location location);	
 
 	public void setTimeToLandAndTakeoff(int landTime, int takeoffTime);
 

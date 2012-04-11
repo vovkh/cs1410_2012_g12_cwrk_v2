@@ -7,9 +7,19 @@ public class LightAircraft extends FuelledAircraft{
 	protected static final int fuelRandomRange = 10 * 60; // extra random range of 10min so that max could be 20 mins * 60 
 	protected static final String aircraftType = "Light Aircraft"; 
 	
-	public LightAircraft(String aircraftType, String locationName, int timeTakenToTakeOff,
+	public LightAircraft(String aircraftType, Location currentLocation, int timeTakenToTakeOff,
 			int timeTakenToLand) {
-		super(aircraftType,  locationName, timeNeededToTakeOff, timeNeededToLand);
+		super(aircraftType,  currentLocation, timeNeededToTakeOff, timeNeededToLand);
 		super.generateAmountOfFuel(fuelMinimum, fuelRandomRange);
+	}
+
+	public void moveToANewLocation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setLocation(Location location) {
+		// TODO Auto-generated method stub
+		
 	}
 }
