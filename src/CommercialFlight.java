@@ -1,4 +1,4 @@
-public class CommertialFlight extends FuelledAircraft{
+public class CommercialFlight extends FuelledAircraft{
 	
 	protected static final int timeNeededToTakeOff = 120;
 	protected static final int timeNeededToLand = 180;
@@ -6,8 +6,8 @@ public class CommertialFlight extends FuelledAircraft{
 	protected static final int fuelMinimum = 1200; // 20 mins * 60
 	protected static final int fuelRandomRange = 1200; // extra random range of 20min so that max could be 40 mins * 60
 
-	public CommertialFlight(Location currentLocation) {
-		super(aircraftType,  currentLocation, timeNeededToTakeOff, timeNeededToLand);
+	public CommercialFlight(Airport airport, Location currentLocation) {
+		super(aircraftType, airport, currentLocation, timeNeededToTakeOff, timeNeededToLand, fuelMinimum, fuelRandomRange);
 		super.generateAmountOfFuel(fuelMinimum, fuelRandomRange);
 	}
 }
