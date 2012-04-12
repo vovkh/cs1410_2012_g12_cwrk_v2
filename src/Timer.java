@@ -1,4 +1,5 @@
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class Timer {
@@ -15,8 +16,8 @@ public class Timer {
 	 * @param _tickSize_secs the length of each 'tick' in seconds
 	 */
 	public Timer (int _maxSimulationTime_secs, int _tickSize_secs) {
-		setMaxSimulationTime_secs(_maxSimulationTime_secs);
-		setTickSize(_tickSize_secs);
+		this.maxSimulationTime_secs = _maxSimulationTime_secs;
+		this.tickSize_seconds = _tickSize_secs;
 		createTimers();
 	}
 
@@ -30,11 +31,11 @@ public class Timer {
 		this.maxSimulationTime.add(Calendar.SECOND, maxSimulationTime_secs);
 	}
 	
-	public void setTickSize(int tickSize_secs){
+	public void setTickSize(int tickSize_secs) {
 		this.tickSize_seconds = tickSize_secs;
 	}
 	
-	public int getTickSize(){
+	public int getTickSize() {
 		return tickSize_seconds;
 	}
 	
@@ -43,7 +44,7 @@ public class Timer {
 	}
 	
 	public Date getCurrentTime(){
-		simulationClock.getTime();
+		return simulationClock.getTime();
 		//h,m,s
 	}
 
@@ -53,7 +54,7 @@ public class Timer {
 	}
 	
 	public int getCurrentTick(){
-		
+		return 0;		
 	}
 		
 	
