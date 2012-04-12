@@ -6,8 +6,8 @@ public class Glider extends UnfuelledAircraft{
 	protected static final String aircraftType = "Glider"; 
 
 	
-	public Glider(String locationName){
-		super(aircraftType, currentLocation, timeNeededToTakeOff, timeNeededToLand);
+	public Glider(Airport airport, Location currentLocation){
+		super(aircraftType, airport, currentLocation, timeNeededToTakeOff, timeNeededToLand);
 	}
 	
 	public void takeOff(){

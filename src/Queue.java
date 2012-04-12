@@ -3,24 +3,16 @@ import java.util.Collections;
 
 
 public class Queue {
+	private ArrayList<Aircraft> queue;
 	
-	public void AddToQueue(){
-		
+	/**
+	 * 
+	 */
+	public Queue(){
+		queue = new ArrayList<Aircraft>();
 	}
 	
-	public void removeFromQueue(){
-		
-	}
-	
-	public int getQueueSize(){
-		
-	}
-	
-	public Aircraft getFromQueue(){
-		
-	}
-	
-	public void Sort(){
+	public void Sort() {
 		/*	private void sortArrivalsQueue() {
 		int n = arrivalsQueue.size();
 		for ( int i = 0 ; i < n ; i ++) {
@@ -43,18 +35,13 @@ public class Queue {
 		 
 	}
 	////////////
-protected ArrayList<Aircraft> queue;
 	
-	/**
-	 * 
-	 */
-	public Queue(){
-		queue = new ArrayList<Aircraft>();
-
-	}
+	
 	public void swapAircraftInQueue(int n1, int n2){
 		Collections.swap(queue,n1,n2);
 	}
+	
+	
 	/**
 	 * Remove an aircraft from the queue
 	 * @param aircraft The aircraft to be removed
@@ -90,8 +77,8 @@ protected ArrayList<Aircraft> queue;
 	
 
 	public boolean isAircraftTypeInQueue(String aircraftType){
-		for(int i=0; i<departuresQueue.size(); i++) {
-			if(departuresQueue.getFromQueue(i).getAircraftType() == aircraftType) {
+		for(int i=0; i<queue.size(); i++) {
+			if(this.getFromQueue(i).getAircraftType() == aircraftType) {
 				return true;
 			}
 		}

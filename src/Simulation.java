@@ -10,7 +10,7 @@ public class Simulation {
 	private String queueType;
 	private Timer timer;
 	private static int numOfAircraftsAdded;
-	private static int SEED;
+	public static int SEED;
 	private int simulationLength;
 	private static int tickSize;
 	private static double COMMERCIAL_FLIGHT_PROBABILITY; // 0.03 seems a good for safe p

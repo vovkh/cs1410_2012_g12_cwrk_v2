@@ -1,7 +1,7 @@
 
 public interface FlyingObject {
 
-	public void act(Queue qu);
+	public void act(int timestamp);
 
 	public void breakdown();
 	
@@ -23,7 +23,7 @@ public interface FlyingObject {
 
 	public int getTickItArrivedOnQueue();
 
-	public void land(Queue qu) ;
+	public void land(int timestamp) ;
 
 	public void setNewLocation(Location currentLocation);
 
@@ -33,7 +33,7 @@ public interface FlyingObject {
 
 	public void setTimeToLandAndTakeoff(int landTime, int takeoffTime);
 
-	public void takeOff(Queue qu);
+	public void takeOff(int timestamp);
 
 	public String toString();
 
