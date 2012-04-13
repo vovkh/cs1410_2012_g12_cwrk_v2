@@ -1,39 +1,43 @@
 
-public class Location{
+public abstract class Location extends Queue {
 
 
 	public int locationSize;
-	protected Queue locationQueue; 
 	protected String locationName;
 
-	public Location(String locationName, int locationSize) {
+	public Location( String locationName, int locationSize ) {
 		this.locationName = locationName;
-		this.locationSize=locationSize;
-		
+		this.locationSize = locationSize;	
 	}
 
-	public void addToLocation(Aircraft aircraft) {
-		locationQueue.addToQueue(aircraft);
+	public void addToLocation( Aircraft aircraft ) {
+		if(getSize() >= getMaxLocationSize()){
+			System.out.println("Can't hold anymore aircraft in this location");
+		}
+		else{
+			addToQueue( aircraft );
+		}
 	}
 
-	public void removeFromLocation(Aircraft aircraft) {
-		locationQueue.removeFromQueue(aircraft);
+	public void removeFromLocation( Aircraft aircraft ) {
+		removeFromQueue( aircraft );
 	}
 
-	public void setMaxLocationSize(int locationSize){
-		this.locationSize=locationSize;
+	public void setMaxLocationSize( int locationSize ){
+		this.locationSize = locationSize;
+	}
+	
+	public int getMaxLocationSize(){
+		return this.locationSize;
 	}
 
-	public Aircraft getAircraftFromLocationQueue(int index) {
-		return locationQueue.getFromQueue(index);
-	}
-
+	
 	public String getLocationName() {
 		return locationName;
 	}
 
-	public int getLocationQueueSize() {
-		return locationQueue.size();
+	public Aircraft getAircraftFromLocation( int index ) {
+		return getFromQueue( index );
 	}
 
 	public String toString() {

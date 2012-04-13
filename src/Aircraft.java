@@ -9,6 +9,9 @@ public abstract class Aircraft implements FlyingObject{
 	public int timeArrivedOnRunway; 
 	public int timeArrivedOnQueue;
 	protected boolean crashed;
+	protected boolean breakdown;
+	protected int timeAircraftBreaksdown;
+	protected int waitingTimeInQueue;
 
 	public Aircraft(String aircraftType, Airport airport, Location currentLocation, int timeNeededToTakeOff, int timeNeededToLand) {
 		this.airport = airport;
@@ -17,6 +20,7 @@ public abstract class Aircraft implements FlyingObject{
 		this.aircraftType = aircraftType;
 		this.currentLocation=currentLocation;
 		crashed = false;
+		waitingTimeInQueue=0;
 
 	}
 
@@ -40,10 +44,30 @@ public abstract class Aircraft implements FlyingObject{
 		}
 	}
 
-	public void breakdown(){
-		//if false when departing - move to workshop
+	//if false when departing - move to workshop
+	public void breakdown(int timeAircraftBreaksdown){
+		this.timeAircraftBreaksdown=timeAircraftBreaksdown;	
+		setBreakdown(true);		
+		System.out.println(getAircraftName()+" broke down while waiting to take off.");
+		this.moveToLocation(airport.getWorkshop(0));
 	}
-
+	
+	
+	public void moveToLocation (Location newLocation) {
+		if(currentLocation != null) {
+			currentLocation.removeFromLocation(this);
+		}
+		newLocation.addToLocation(this);
+	}
+	
+	public void setBreakdown(boolean bool){
+		this.breakdown = bool;
+	}
+	
+	public boolean getBreakdown(){
+		return this.breakdown;
+	}
+	
 	public void crash(){
 		crashed=true;
 	}	
@@ -77,6 +101,10 @@ public abstract class Aircraft implements FlyingObject{
 	public Location getLocation() {
 		return this.currentLocation;
 	}
+	
+	public int getTimeAircraftBrokeDown() {
+		  return this.timeAircraftBreaksdown;
+		 }
 
 	public int getTickItArrivedOnRunway() {
 		return timeArrivedOnRunway;
@@ -90,22 +118,19 @@ public abstract class Aircraft implements FlyingObject{
 		return timeNeededToTakeOff;
 	}
 
-
 	public int getTickItArrivedOnQueue() {
 		return timeArrivedOnQueue;
 	}
 
-
 	public void land(int timestamp) {	
 		Location runway = airport.getAvailableRunway();
 		//nb: current location is likely to be airspace.. Doesn't matter too much as we are simply wanting to move the aircraft to the runway
-		currentLocation.removeFromLocation(this);	
-		runway.addToLocation(this);
+		moveToLocation(runway);
 		
 		this.timeArrivedOnRunway = timestamp;
 	}
 
-	private void setAircraftID(int number){
+	public void setAircraftID(int number){
 		aircraftId = number;
 	}
 
@@ -119,27 +144,6 @@ public abstract class Aircraft implements FlyingObject{
 	
 	public void setNewLocation(Location currentLocation) {
 		this.currentLocation = currentLocation;
-		//move itself from current location and assign itself to a new location
-
-		/*
-		 * 	private void waitingTimeOnRunway(Aircraft aircraft, int tick){
-		int waitTickTime = aircraft.getTickItArrivedOnRunway() + aircraft.getAircraftWaitingTimeOnRunway();	
-		if(tick >= waitTickTime) {
-			runway.setInUse(false);
-
-			if(aircraft.getLocation() instanceof Hangar) {
-				//Finished taking off
-				System.out.println("Runway cleared - Aircraft finished taking off");
-			}
-			if(aircraft.getLocation() instanceof Airspace) {
-				//Finished taking off
-				System.out.println("Runway cleared - Aircraft finished landing");
-			}
-		}
-	}
-		 * 
-		 */
-
 	}	
 
 	public void setTimeToLandAndTakeoff(int landTime, int takeoffTime){
@@ -158,6 +162,10 @@ public abstract class Aircraft implements FlyingObject{
 	public String toString() {
 		return "";
 	}
-
+	
+	public void wait(int tickTime){
+		waitingTimeInQueue=waitingTimeInQueue+tickTime;
+	}
 
 }
+
