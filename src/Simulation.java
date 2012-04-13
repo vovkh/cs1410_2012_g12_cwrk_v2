@@ -7,7 +7,6 @@ public class Simulation {
 	private static Airport airport;
 	private static Random random;
 	private Statistics statistics;
-	private String queueType;
 	private Timer timer;
 	private static int numOfAircraftsAdded;
 	public static int SEED;
@@ -20,7 +19,7 @@ public class Simulation {
 
 	public void main(String[] args) throws InterruptedException {
 
-		if (args==null){
+		if (args==null) {
 			defaultSimulationProbabilities(); 
 		}
 		else{
@@ -43,34 +42,30 @@ public class Simulation {
 			int currentTick = timeSeconds;
 			System.out.println(getTime(currentTick));
 
-
-			airport.checkRunway(currentTick);  
-			airport.updatePerTick(tickSize);
+			airport.updateAiportPerTick(tickSize, currentTick);
 
 			addAicraftToSimulation(); 
 			if(newAircraft != null) {
 				addAircraftToSimulation(airport, newAircraft, currentTick);	
-				System.out.println("|| Arrivals queue size is "+airport.getArrivalsSize()+" || Departures queue size is "+airport.getDeparturesSize()+" ||");		
+				System.out.println("|| Arrivals queue size is "+airport.getArrivalsQueueSize()+" || Departures queue size is "+airport.getDeparturesQueueSize()+" ||");		
 			} 
 
-			if(airport.getArrivalsSize()>0 || airport.getDeparturesSize()>0 && airport.isRunwayInUse()==false){
+			if(airport.getArrivalsQueueSize()>0 || airport.getDeparturesQueueSize()>0){
 				airport.assignAircraftToRunway(currentTick);
 
 			}
-
-			updateAirport();
 		}
 	}
 	
 	public void createAirport(){		
-		airport = new Airport();
+		airport = new Airport(1); // with 1 runway.
 	}
 
 	private void defaultSimulationProbabilities(){
 		COMMERCIAL_FLIGHT_PROBABILITY = 0.2; // 0.03 seems a good for safe p
 		GLIDER_PROBABILITY = 0.002; // 0.2% chance of creating a glider
 		LIGHT_AIRCRAFT_PROBABILITY = 0.005; // 0.5% chance of creating a light aircraft
-		SEED=42;
+		SEED = 42;
 		simulationLength = 24*60*60; // 24*60*60; // 24hours; 
 		tickSize = 30; // 30seconds;
 	}
@@ -79,8 +74,8 @@ public class Simulation {
 		this.simulationLength=simulationLength;
 	}
 
-	public void setSimulationResolution(){
-
+	public void setSimulationResolution(int simulationResolution){
+		this.tickSize = simulationResolution;
 	}
 
 	public void setCreationProbabilities(int COMMERCIAL_FLIGHT_PROBABILITY, int GLIDER_PROBABILITY, int LIGHT_AIRCRAFT_PROBABILITY){
@@ -90,23 +85,23 @@ public class Simulation {
 	}
 
 	public String[] getCreationProbabilities(){
-	
+		return null;
 	}
 
 	public void setRandomSeed(int seed){
-		//hmm, why?.. A random will be random if you don't pass SEED. isn't it?
+		this.SEED = seed;
 	}
 
 	public int getRandomSeed(){
-		
+		return this.SEED;
 	}
 
-	public void setQueueType(){
-
+	public void setQueueType(int type){
+		airport.setQueueType(type); // number can only be 1 or 2, 
 	}
 
-	public String getQueueType(){
-		return queueType;
+	public int getQueueType(){
+		return airport.getQueueType();
 
 	}
 
@@ -120,13 +115,13 @@ public class Simulation {
 		Random rand = new Random(SEED);
 		numOfAircraftsAdded++;
 		aircraft.setAircraftID(numOfAircraftsAdded);
-		aircraft.setTickItArrivedOnQueue(tick);
+		aircraft.setArrivalTickOnQueue(tick);
 		if(rand.nextBoolean()) { 
-			airport.addToArrivals(aircraft);
+			aircraft.moveToLocation(airport.getAvailableAirspace());
 			System.out.println("|| "+aircraft.getAircraftName()+" was added to Arrivals Queue."); // just testing
 		}
 		else {
-			airport.addToDepartures(aircraft);
+			aircraft.moveToLocation(airport.getAvailableAirspace());
 			System.out.println("|| "+aircraft.getAircraftName()+" was added to Departures Queue.");
 		}
 
@@ -136,14 +131,14 @@ public class Simulation {
 		Aircraft newAircraft;
 
 		if(probability <= ( COMMERCIAL_FLIGHT_PROBABILITY )) {
-			newAircraft = new CommercialFlight(airport);
+			newAircraft = new CommercialFlight(airport, null);
 
 		}
 		else if(probability <= (LIGHT_AIRCRAFT_PROBABILITY)){
-			newAircraft = new LightAircraft(airport);
+			newAircraft = new LightAircraft(airport, null);
 		}
 		else if(probability <= (GLIDER_PROBABILITY)) {
-			newAircraft = new Glider(airport);
+			newAircraft = new Glider(airport, null);
 		}
 		else {
 			newAircraft = null;
@@ -164,32 +159,14 @@ public class Simulation {
 	}
 	
 	public static void updateAirport(){
-		/*	public void updatePerTick(int tick){     //***I guess this should go to Simulation***
-		int i = 0 ;
-		sortArrivalsQueue();
-		while(i<arrivalsQueue.size()){
-			if(arrivalsQueue.getFromQueue(i) instanceof FuelledAircraft){
-				FuelledAircraft currentAircraft = (FuelledAircraft) arrivalsQueue.getFromQueue(i);
-				currentAircraft.incrementFuelConsumptionLevel(tick);
-				if(currentAircraft.checkFuelConsumptionLevel()==true){
-					numberOfCrashes = numberOfCrashes + 1;
-					arrivalsQueue.removeFromQueue(arrivalsQueue.getFromQueue(i));
-				}
-				else{
-					System.out.println(arrivalsQueue.getFromQueue(i).getAircraftName()+" has current Fuel consumption of "+currentAircraft.getCurrentFuelConsumptionLevel());
-				}
-			}
-			i = i + 1;
-		}				
-	}	
-*/
-		int totalNumberOfPlanesLeft = airport.getDeparturesSize()+airport.getArrivalsSize();
+		
+		int totalNumberOfPlanesLeft = airport.getDeparturesQueueSize()+airport.getArrivalsQueueSize();
 		System.out.println("###########################STATISTICS##########################");
-		System.out.println("# Number of planes that landed: "+airport.getNumberOfLandings());
-		System.out.println("# Number of planes that taken off: "+airport.getNumberOfTakeOffs());
-		System.out.println("# Number of planes that crashed due to out of fuel: "+airport.getNumberOfCrashes());
-		System.out.println("# Number of planes that was added to simulation: "+numOfAircraftsAdded);
-		System.out.println("# Number of planes that did not land or take off: "+totalNumberOfPlanesLeft);
+		System.out.println("# Number of planes that landed: " + airport.getNumberOfLandings());
+		System.out.println("# Number of planes that taken off: " + airport.getNumberOfTakeOffs());
+		System.out.println("# Number of planes that crashed due to out of fuel: " + airport.getNumberOfCrashes());
+		System.out.println("# Number of planes that was added to simulation: " + numOfAircraftsAdded);
+		System.out.println("# Number of planes that did not land or take off: " + totalNumberOfPlanesLeft);
 		System.out.println("# Number of planes that broke down during take off: ");
 	}
 
